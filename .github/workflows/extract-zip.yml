@@ -1,0 +1,24 @@
+name: Extract Terra World ZIP
+
+on:
+  workflow_dispatch:  # Lets you trigger it manually from GitHub UI
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Extract ZIP
+        run: |
+          unzip -o "Terra World.zip" -d extracted/
+          mv extracted/* . || true
+          rm -rf extracted/
+          
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Extract Terra World ZIP contents" || echo "Nothing to commit"
+          git push
